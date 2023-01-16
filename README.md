@@ -13,6 +13,7 @@ AZP_AGENT_NAME="docker-agent"     # <agent name>
 ```
 
 ## Environment variables
+
 | Environment variable | Description                                                                                                                              |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | AZP_URL              | The URL of the Azure DevOps or Azure DevOps Server instance.                                                                             |
@@ -23,12 +24,28 @@ AZP_AGENT_NAME="docker-agent"     # <agent name>
 
 # Build image
 
+### Base image Ubuntu 20.04
+
 ```
-docker build -t $IMAGE_NAME:$IMAGE_TAG .
+docker build -t $IMAGE_NAME:$IMAGE_TAG -f Dockerfile-ubuntu2004 .
+docker build -t $IMAGE_NAME:$IMAGE_TAG-slim -f Dockerfile-ubuntu2004-slim .
+```
+
+### Base image Ubuntu 22.04
+
+```
+docker build -t $IMAGE_NAME:$IMAGE_TAG -f Dockerfile-ubuntu2204 .
+docker build -t $IMAGE_NAME:$IMAGE_TAG-slim -f Dockerfile-ubuntu2204-slim .
 ```
 
 # Start image
 
 ```
-docker run --rm -e AZP_URL=$AZP_URL -e AZP_TOKEN=$AZP_TOKEN -e AZP_AGENT_NAME=$AZP_AGENT_NAME $IMAGE_NAME:$IMAGE_TAG
+docker run --name agent1 --rm -e AZP_URL=$AZP_URL -e AZP_TOKEN=$AZP_TOKEN -e AZP_AGENT_NAME=$AZP_AGENT_NAME $IMAGE_NAME:$IMAGE_TAG
+```
+
+# Exec image
+
+```
+docker exec -it agent1 /bin/bash
 ```
